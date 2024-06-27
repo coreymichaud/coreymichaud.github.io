@@ -9,11 +9,19 @@ website:
       - href: index.qmd
         text: Home
       - about.qmd
+      - projects.qmd
       - blog.qmd
+    tools:
+      - icon: github
+        href: https://github.com/coreymichaud
+      - icon: linkedin
+        href: https://www.linkedin.com/in/coreymichaud1/
+      - icon: envelope
+        href: mailto:cor3y.michaud@gmail.com
 
 format:
   html:
-    theme: cosmo
+    theme: yeti
     css: styles.css
     toc: true
 
