@@ -2,6 +2,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/blog/Blog Template/index.html",
       "/blog/06-27-2024-Industrial-Revolution/index.html",
       "/blog/06-25-2024-Test-Post/index.html",
       "/blog/12/index.html",
@@ -9,6 +10,12 @@
       "/blog/14/index.html",
       "/blog/15/index.html",
       "/blog/16/index.html"
+    ]
+  },
+  {
+    "listing": "/projects.html",
+    "items": [
+      "/projects/alzheimers-detection/index.html"
     ]
   }
 ]

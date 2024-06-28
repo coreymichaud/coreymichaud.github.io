@@ -1,0 +1,216 @@
+---
+title: "Alzheimer's Detection" # This is the title of the blog post
+description: "This is a python notebook where I analyze the DAWRIN dataset to detect Alzheimer's in an individual's handwriting. To classify, I used random forest in Python." # This is the description and shows up under the title and picture on the blog page
+author: # Use this for information about myself
+  - name: Corey Michaud
+    url: https://github.com/coreymichaud/Alzheimers-Detection # Do the github page for the website NOT the blog
+date: 06-31-2023 # Date this post is published
+categories: [Python, Machine Learning] # Self-defined categories
+image: github.png # This is the image that will be the preview image and it HAS to be in this file to work
+jupyter: python3
+---
+
+<!-- This is the github button -->
+
+<a href="https://github.com/coreymichaud/Alzheimers-Detection" class="btn" target="_blank"><i class="fab fa-github"></i> Source Code</a>
+
+# Background
+
+Alzheimer's is a type of dementia that affects memory, thinking, and behavior. It is caused by increasing age, and primarily affects people above the age of 65. As a person develops Alzheimer's, it progressively becomes worse where the individual can lose the ability to carry a conversation or even take care of themselves. After diagnosis, a person can expect to live on average between 4 to 8 years, but on better cases up to 20 years. Luckily there is medication to help slow the worsening of Alzheimer's, but nothing to completely prevent it from happening.
+
+The data used for the detection of Alzheimer's through handwriting comes from the DARWIN (Diagnosis AlzheimeR WIth haNdwriting) dataset. This dataset is made up of 174 individual's handwriting where roughly half are Alzheimer's patients (P), and healthy people (H). The handwriting was taken through tasks the individuals were asked to do, and then variables like time in air were measured. In doing so, the creators of the DARWIN dataset provided us the materials we need to use machine learning techniques to detect the early stages of Alzheimer's through handwriting. Some of the tasks recorded were connecting points through lines and copying phrases that were written in front of them, all of which test different parts of the brain.
+
+Using handwriting data, I will use a random forest classifier to predict whether an individual has Alzheimer's or not. The goal is for future handwriting data to be inserted and accurately predict the correct diagnosis, saving the individual time to get treatment to slow down the process.
+
+Alzheimers detection dataset obtained from https://www.kaggle.com/datasets/taeefnajib/handwriting-data-to-detect-alzheimers-disease.
+
+```{python}
+# Libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+```
+
+```{python}
+# Loading data
+alz = pd.read_csv("alzheimers.csv")
+```
+
+# Exploratory Data Analysis
+
+```{python}
+# First 5 rows of data
+alz.head(5)
+```
+
+```{python}
+# Shape of data
+alz.shape
+```
+
+```{python}
+# Data information
+alz.info()
+```
+
+```{python}
+# Checking for object column names
+alz.select_dtypes(include = "object").columns.tolist()
+```
+
+```{python}
+# Checking for missing values
+alz.isna().sum() # No NA values
+```
+
+# Feature Engineering
+
+```{python}
+# Removing ID column
+alz = alz.drop("ID", axis = 1)
+alz.head(5)
+```
+
+```{python}
+# Converting class to numeric
+alz["class"] = alz["class"].replace({'P': 1, 'H': 0})
+alz["class"]
+```
+
+# Model Training
+
+```{python}
+from sklearn.model_selection import train_test_split
+
+# Separating features from target
+X = alz.drop(columns=["class"])
+y = alz["class"]
+
+# Training data with a 70/30 split
+X_train, X_test, y_train, y_test = train_test_split(X, y, train_size = 0.7, random_state = 42)
+```
+
+```{python}
+# Random Forest
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.tree import plot_tree
+
+# Creating random forest pipeline with scaled data
+pipe = Pipeline([
+    ('scaler', StandardScaler()),
+    ('classifier', RandomForestClassifier(random_state = 42, max_samples = 0.6, min_samples_leaf = 2))
+])
+
+# Fitting pipeline
+pipe.fit(X_train, y_train)
+
+# Predicting target values
+y_pred = pipe.predict(X_test)
+```
+
+```{python}
+# Plotting first tree in the random forest
+tree_viz = pipe.named_steps['classifier'].estimators_[0]
+
+fig, ax = plt.subplots(figsize = (15, 10))
+
+plot_tree(tree_viz, feature_names = alz.columns.tolist(), class_names = ["Patient", "Healthy"], filled = True)
+
+plt.show()
+```
+
+```{python}
+# Plotting fiftieth tree in the random forest
+tree_viz = pipe.named_steps['classifier'].estimators_[49]
+
+fig, ax = plt.subplots(figsize = (15, 10))
+
+plot_tree(tree_viz, feature_names = alz.columns.tolist(), class_names = ["Patient", "Healthy"], filled = True)
+
+plt.show()
+```
+
+# Results
+
+```{python}
+from sklearn.metrics import f1_score
+
+# F1 score is high so this random forest model is a good predictor of the target
+f1 = f1_score(y_test, y_pred)
+print("F1 Score:", f1)
+```
+
+```{python}
+from sklearn.metrics import roc_auc_score, roc_curve
+
+# False positive and true positive rates
+fpr, tpr, _ = roc_curve(y_test, y_pred)
+
+# AUC
+auc = roc_auc_score(y_test, y_pred)
+
+# Plotting ROC curve
+fig, ax = plt.subplots()
+
+ax.plot(fpr, tpr, color = 'darkorange', lw = 2, label = 'ROC curve (AUC = {:.2f})'.format(auc))
+ax.plot([0, 1], [0, 1], color = 'navy', lw = 2, linestyle = '--')
+
+ax.set_xlim([0.0, 1.0])
+ax.set_ylim([0.0, 1.05])
+ax.set_xlabel('False Positive Rate')
+ax.set_ylabel('True Positive Rate')
+ax.set_title('Receiver Operating Characteristic (ROC) Curve')
+ax.legend(loc = "lower right")
+
+sns.despine()
+
+plt.show()
+```
+
+```{python}
+from sklearn.metrics import confusion_matrix
+
+# Creating confusion matrix
+conf_matrix = confusion_matrix(y_test,y_pred)
+
+# Plotting confusion matrix 
+fig, ax = plt.subplots()
+
+sns.heatmap(conf_matrix,
+            annot = True,
+            fmt = 'g',
+            xticklabels = ['Positive', 'Negative'],
+            yticklabels = ['Positive', 'Negative'],
+            cmap = ["Red", "Green", "Red", "Green"],
+            cbar = False,
+            annot_kws = {"size": 20},
+            ax = ax)
+
+ax.set_title('Confusion Matrix', fontsize = 17)
+ax.set_ylabel('Prediction', fontsize = 13)
+ax.set_xlabel('Actual', fontsize = 13)
+
+plt.show()
+```
+
+```{python}
+# Creating TP/FP/TN/FN
+TP = conf_matrix[1, 1]
+FN = conf_matrix[1, 0]
+TN = conf_matrix[0, 0]
+FP = conf_matrix[0, 1]
+
+# Printing results of predictions
+accuracy = (TP + TN) / (TP + TN + FP + FN)
+precision = (TP) / (TP + FP)
+sensitivity = TP / (TP + FN)
+specificity = TN / (TN + FP)
+
+print("Accuracy:", accuracy)
+print("Precision:", precision)
+print("Sensitivity:", sensitivity)
+print("Specificity:", specificity)
+```

@@ -1,3 +1,17 @@
 ---
 title: "About"
 ---
+
+Hello! Welcome to my **about** page, where you're **about** to find out **about** me!
+
+# <i class="fas fa-graduation-cap"></i> Education
+
+I graduated from the University of Central Florida in Spring of 2024 with a Bachelors of Science in Statistics. \[Write more.\]
+
+# <i class="fas fa-globe"></i> Hobbies
+
+When I'm not trying to succeed in life, I like to play video games. Minecraft is an oldie but a goodie, and I sometimes like to play Hearthstone because you can multitask while playing the battlegrounds mode. I love watching movies, even ones people say are bad, but I *especially* like watching them in a movie theater. I feel like it's a lot more immersive and fun that way. [Write more.]
+
+# <i class="fas fa-cat"></i> Cats
+
+My girlfriend, Kristina, and I have 2 cats. A cranky, 7 year old tabby named Gnocchi, and a super hungry 2 year old calico named Ube. [Write more and put a picture of them above this paragraph but before the "Hobbies" title.]

@@ -24,8 +24,13 @@ My name's Corey Michaud. I recently graduated from the University of Central Flo
 
 **University of Central Florida** \| Orlando, Florida
 
-B.S. in Statistics \| Aug. 2020 - May 2024
+**B.S. in Statistics** \| Aug. 2020 - May 2024
 
-# Experience
+**Coursework Included:**
 
-No technical experience, but I have worked on countless projects throughout college and have done side projects outside of school.
+-   Calculus
+-   Linear Algebra
+-   Statistical Methods
+-   Statistical Theory
+-   Machine Learning
+-   Time Series
