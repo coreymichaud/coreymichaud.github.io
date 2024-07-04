@@ -2,16 +2,32 @@
 title: "About"
 ---
 
-Hello! Welcome to my **about** page, where you're **about** to find out **about** me!
-
 # <i class="fas fa-graduation-cap"></i> Education
 
-I graduated from the University of Central Florida in Spring of 2024 with a Bachelors of Science in Statistics. \[Write more.\]
+I graduated from the University of Central Florida in Spring of 2024 with a Bachelors of Science in Statistics. I majored in Statistics because throughout high school I was pretty good at math, and when I took AP Statistics I felt like it came naturally to me. Before I had decided, I "decided" on a new major every month in High School until I landed on statistics, and I'm glad I chose it.\
+
+During my time at UCF, I was a part of three clubs: The Association of Computing Machine, Knight Hacks, and AI\@UCF. Through these clubs I was able to hone my coding skills and learn about different subjects within machine learning. These clubs allowed me to attend seminars on different fields within computer science and I got hands-on experience with a number of algorithms. Knight Hacks holds one of the largest Florida Hackathons each year, and I was able to attend it for multiple times where I had to make small projects under a time constraint and constant pressure.
+
+Courses that I have taken include statistical methods, statistical theory, nonparametric statistics, calculus, linear algebra, machine learning, and time series. These have all helped me grow my knowledge of statistics and machine learning and apply it to case studies and numerous projects. I have covered other areas like Bayesian statistics and mathematical methods for artificial intelligence, but these have been spread out through some of my classes.
+
+# <i class="fa-solid fa-screwdriver-wrench"></i> Skills
+
+For coding, I mainly have used Python and R for machine learning, and R I have used the most for also conducting statistical tests. For R, I am able to create visualizations using ggplot, and using different libraries I can do machine learning functions to solve problems within data. For Python, I have used matplotlib and seaborn for data visualization, and I have used sci-kit learn for machine learning. Besides sci-kit learn, I have used Keras and TensorFlow for a natural language processing project, but I want to learn more about both languages, and hopefully PyTorch soon. For communicating with databases, I use SQL and have used SQLite and PostgreSQL for database practice.
+
+Data visualization has always interested me since I made my first "pretty" plot using ggplot in R. Since then, I have gotten a lot better in R and Python, but now I am focusing a lot on Tableau and Power BI for their interactive dashboards. You can show a lot more data with an interactive dashboard than a static one, so I have been creating many dashboards to be as powerful as they can.
+
+Feel free to check out my projects tab where I showcase some of them! If you want to check out more, or the source code, then be sure to click on the GitHub icon in the navigation bar.
 
 # <i class="fas fa-globe"></i> Hobbies
 
-When I'm not trying to succeed in life, I like to play video games. Minecraft is an oldie but a goodie, and I sometimes like to play Hearthstone because you can multitask while playing the battlegrounds mode. I love watching movies, even ones people say are bad, but I *especially* like watching them in a movie theater. I feel like it's a lot more immersive and fun that way. [Write more.]
+When I'm not trying to learn new things, I like to play video games. Minecraft is an oldie but a goodie, and I sometimes like to play Hearthstone because you can multitask while playing the battlegrounds mode. I love watching movies, even ones people say are bad, but I *especially* like watching them in a movie theater. I feel like it's a lot more immersive and fun that way.\
+
+I'm not sure if this counts as a hobby, but exploring new areas excites me. Everything is new and interesting, and you get to feel what it's like to live in that area. When I still lived with my family, we would travel a lot and I got to experience national parks, loud cities, and nature that I don't get to experience in Florida. One thing I've learned recently is Florida has a lot of natural springs and to me, that feels like traveling because they're far from where I live, and they all feel different. Yes, they all have water to swim and kayak in, but the surrounding areas are unique in their own ways.
 
 # <i class="fas fa-cat"></i> Cats
 
-My girlfriend, Kristina, and I have 2 cats. A cranky, 7 year old tabby named Gnocchi, and a super hungry 2 year old calico named Ube. [Write more and put a picture of them above this paragraph but before the "Hobbies" title.]
+![Gnocchi](images/gnocchi.jpg){width="160"} ![Ube](images/ube.jpg){width="160"}
+
+My girlfriend, Kristina, and I have 2 cats. A cranky, 7 year old tabby named Gnocchi (left), and a super hungry 2 year old calico named Ube (right). Gnocchi is a difficult cat who likes to decide that she doesn't like her fancy wet food anymore, and request different food. She also happens to be a yapper if you don't give her enough attention, so she gets played with a lot. Ube, on the other hand, is a purr-fect cat. She plays with toys and whatever random wrappers she can find, and likes to cuddle. The one thing about Ube is she can eat, eat, eat. Take her to a buffet and she could probably clean the whole place out.  
+
+Gnocchi was my first cat I've gotten, and she happens to also be the first pet I've ever gotten, besides a few fish when I was little. She taught me how to become more responsible for things other than myself, and helped me make better daily routines so everything I do becomes more efficient.

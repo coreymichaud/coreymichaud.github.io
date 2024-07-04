@@ -1,5 +1,6 @@
 ---
 title: "Insert title" # This is the title of the blog post
+format: html
 description: "Insert description" # This is the description and shows up under the title and picture on the blog page
 author: # Use this for information about myself
   - name: Corey Michaud
@@ -13,3 +14,12 @@ draft: true # Setting this to `true` will prevent your post from appearing on yo
 ---
 
 Start writing here!
+
+## Support <i class="fa-solid fa-heart"></i>
+
+You've reached the end of my blog post! 🎉🎉🎉 \
+If you learned something and would like to support me, feel free to buy me a coffee :)
+
+```{=html}
+<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="coreymichaud" data-color="#FFDD00" data-emoji=""  data-font="Poppins" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script>
+```

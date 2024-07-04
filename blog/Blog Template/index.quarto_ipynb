@@ -1,0 +1,55 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"Insert title\" # This is the title of the blog post\n",
+        "description: \"Insert description\" # This is the description and shows up under the title and picture on the blog page\n",
+        "author: # Use this for information about myself\n",
+        "  - name: Corey Michaud\n",
+        "    url: https://coreymichaud.github.io # Do the github page for the website NOT the blog\n",
+        "date: <!-- Do the date here --> # Date this post is published\n",
+        "categories: [Insert category names in bracket with commas to separate] # Self-defined categories\n",
+        "citation: # This citation is for if anyone is citing you\n",
+        "  url: https://coreymichaud.github.io/blog/nameofthisblogsfolder/ # Again, do the github page for this BUT THIS TIME FOR THIS SPECIFIC BLOG POST\n",
+        "image: test.png # This is the image that will be the preview image and it HAS to be in this file to work\n",
+        "draft: true # Setting this to `true` will prevent your post from appearing on your listing page until you're ready!\n",
+        "---\n",
+        "\n",
+        "```{js}\n",
+        "document.addEventListener(\"DOMContentLoaded\", function() {\n",
+        "    var script = document.createElement(\"script\");\n",
+        "    script.type = \"text/javascript\";\n",
+        "    script.src = \"https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js\";\n",
+        "    script.setAttribute(\"data-name\", \"bmc-button\");\n",
+        "    script.setAttribute(\"data-slug\", \"coreymichaud\");\n",
+        "    script.setAttribute(\"data-color\", \"#FFDD00\");\n",
+        "    script.setAttribute(\"data-emoji\", \"\");\n",
+        "    script.setAttribute(\"data-font\", \"Poppins\");\n",
+        "    script.setAttribute(\"data-text\", \"Buy me a coffee\");\n",
+        "    script.setAttribute(\"data-outline-color\", \"#000000\");\n",
+        "    script.setAttribute(\"data-font-color\", \"#000000\");\n",
+        "    script.setAttribute(\"data-coffee-color\", \"#ffffff\");\n",
+        "    document.body.appendChild(script);\n",
+        "});\n",
+        "```\n",
+        "\n",
+        "\n",
+        "Start writing here!"
+      ],
+      "id": "97f7109b"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "C:\\Users\\cor3y\\AppData\\Local\\Programs\\Python\\Python311\\share\\jupyter\\kernels\\python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}
