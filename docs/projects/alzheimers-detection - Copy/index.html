@@ -149,12 +149,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Blog</span></a>
   </li>  
 </ul>
-              <div class="quarto-navbar-tools tools-wide">
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools tools-wide">
     <a href="https://github.com/coreymichaud" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
     <a href="https://www.linkedin.com/in/coreymichaud1/" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-linkedin"></i></a>
     <a href="mailto:cor3y.michaud@gmail.com" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-envelope"></i></a>
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -226,21 +226,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The data used for the detection of Alzheimer’s through handwriting comes from the DARWIN (Diagnosis AlzheimeR WIth haNdwriting) dataset. This dataset is made up of 174 individual’s handwriting where roughly half are Alzheimer’s patients (P), and healthy people (H). The handwriting was taken through tasks the individuals were asked to do, and then variables like time in air were measured. In doing so, the creators of the DARWIN dataset provided us the materials we need to use machine learning techniques to detect the early stages of Alzheimer’s through handwriting. Some of the tasks recorded were connecting points through lines and copying phrases that were written in front of them, all of which test different parts of the brain.</p>
 <p>Using handwriting data, I will use a random forest classifier to predict whether an individual has Alzheimer’s or not. The goal is for future handwriting data to be inserted and accurately predict the correct diagnosis, saving the individual time to get treatment to slow down the process.</p>
 <p>Alzheimers detection dataset obtained from https://www.kaggle.com/datasets/taeefnajib/handwriting-data-to-detect-alzheimers-disease.</p>
-<div id="bf0c9152" class="cell" data-execution_count="1">
+<div id="8562b780" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Libraries</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="e6986aea" class="cell" data-execution_count="2">
+<div id="690f61cf" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loading data</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>alz <span class="op">=</span> pd.read_csv(<span class="st">"alzheimers.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="exploratory-data-analysis" class="level1">
 <h1>Exploratory Data Analysis</h1>
-<div id="07af46e5" class="cell" data-execution_count="3">
+<div id="8d565a3c" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># First 5 rows of data</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>alz.head(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
@@ -402,14 +402,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="823e2356" class="cell" data-execution_count="4">
+<div id="382e57e5" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Shape of data</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>alz.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>(174, 452)</code></pre>
 </div>
 </div>
-<div id="a76d0bd1" class="cell" data-execution_count="5">
+<div id="cfb7a807" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data information</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>alz.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -420,14 +420,14 @@ dtypes: float64(300), int64(150), object(2)
 memory usage: 614.6+ KB</code></pre>
 </div>
 </div>
-<div id="4348ba03" class="cell" data-execution_count="6">
+<div id="ab06bd32" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking for object column names</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>alz.select_dtypes(include <span class="op">=</span> <span class="st">"object"</span>).columns.tolist()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>['ID', 'class']</code></pre>
 </div>
 </div>
-<div id="01ea3cb6" class="cell" data-execution_count="7">
+<div id="f02b9896" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking for missing values</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>alz.isna().<span class="bu">sum</span>() <span class="co"># No NA values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
@@ -448,7 +448,7 @@ Length: 452, dtype: int64</code></pre>
 </section>
 <section id="feature-engineering" class="level1">
 <h1>Feature Engineering</h1>
-<div id="61d0da16" class="cell" data-execution_count="8">
+<div id="7a138cf3" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Removing ID column</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>alz <span class="op">=</span> alz.drop(<span class="st">"ID"</span>, axis <span class="op">=</span> <span class="dv">1</span>)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>alz.head(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -611,12 +611,12 @@ Length: 452, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="0a729f5e" class="cell" data-execution_count="9">
+<div id="6d95bb19" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Converting class to numeric</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>alz[<span class="st">"class"</span>] <span class="op">=</span> alz[<span class="st">"class"</span>].replace({<span class="st">'P'</span>: <span class="dv">1</span>, <span class="st">'H'</span>: <span class="dv">0</span>})</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>alz[<span class="st">"class"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\cor3y\AppData\Local\Temp\ipykernel_12824\2961317950.py:2: FutureWarning: Downcasting behavior in `replace` is deprecated and will be removed in a future version. To retain the old behavior, explicitly call `result.infer_objects(copy=False)`. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+<pre><code>C:\Users\cor3y\AppData\Local\Temp\ipykernel_11244\2961317950.py:2: FutureWarning: Downcasting behavior in `replace` is deprecated and will be removed in a future version. To retain the old behavior, explicitly call `result.infer_objects(copy=False)`. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
   alz["class"] = alz["class"].replace({'P': 1, 'H': 0})</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="9">
@@ -637,7 +637,7 @@ Name: class, Length: 174, dtype: int64</code></pre>
 </section>
 <section id="model-training" class="level1">
 <h1>Model Training</h1>
-<div id="2eb352f9" class="cell" data-execution_count="10">
+<div id="163d40b2" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Separating features from target</span></span>
@@ -647,7 +647,7 @@ Name: class, Length: 174, dtype: int64</code></pre>
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Training data with a 70/30 split</span></span>
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, train_size <span class="op">=</span> <span class="fl">0.7</span>, random_state <span class="op">=</span> <span class="dv">42</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cfa4bd97" class="cell" data-execution_count="11">
+<div id="5ac5b782" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Random Forest</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
@@ -666,7 +666,7 @@ Name: class, Length: 174, dtype: int64</code></pre>
 <span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Predicting target values</span></span>
 <span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> pipe.predict(X_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="0d9e7bd1" class="cell" data-execution_count="12">
+<div id="5fe265b2" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting first tree in the random forest</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>tree_viz <span class="op">=</span> pipe.named_steps[<span class="st">'classifier'</span>].estimators_[<span class="dv">0</span>]</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -683,7 +683,7 @@ Name: class, Length: 174, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="cef0be9f" class="cell" data-execution_count="13">
+<div id="161e9bf1" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting fiftieth tree in the random forest</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>tree_viz <span class="op">=</span> pipe.named_steps[<span class="st">'classifier'</span>].estimators_[<span class="dv">49</span>]</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -703,7 +703,7 @@ Name: class, Length: 174, dtype: int64</code></pre>
 </section>
 <section id="results" class="level1">
 <h1>Results</h1>
-<div id="88822ca6" class="cell" data-execution_count="14">
+<div id="c43d6c05" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> f1_score</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># F1 score is high so this random forest model is a good predictor of the target</span></span>
@@ -713,7 +713,7 @@ Name: class, Length: 174, dtype: int64</code></pre>
 <pre><code>F1 Score: 0.9019607843137255</code></pre>
 </div>
 </div>
-<div id="ebd82325" class="cell" data-execution_count="15">
+<div id="3fea4c9e" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> roc_auc_score, roc_curve</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># False positive and true positive rates</span></span>
@@ -746,7 +746,7 @@ Name: class, Length: 174, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="8717bf5d" class="cell" data-execution_count="16">
+<div id="be6ca198" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating confusion matrix</span></span>
@@ -778,7 +778,7 @@ Name: class, Length: 174, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="69cc303f" class="cell" data-execution_count="17">
+<div id="5058920f" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating TP/FP/TN/FN</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>TP <span class="op">=</span> conf_matrix[<span class="dv">1</span>, <span class="dv">1</span>]</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>FN <span class="op">=</span> conf_matrix[<span class="dv">1</span>, <span class="dv">0</span>]</span>
@@ -1228,19 +1228,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
-<footer class="footer">
-  <div class="nav-footer">
-    <div class="nav-footer-left">
-<p>© Copyright 2024, Corey Michaud</p>
-</div>   
-    <div class="nav-footer-center">
-      &nbsp;
-    </div>
-    <div class="nav-footer-right">
-<p>This website is built with <i class="fa-solid fa-heart"></i>, <a href="https://github.com/coreymichaud/coreymichaud.github.io" target="_blank"><i class="fa-brands fa-github"></i></a>, <a href="https://www.r-project.org/about.html" target="_blank"><i class="fa-brands fa-r-project"></i></a>, and <a href="https://quarto.org/" target="_blank">Quarto</a></p>
-</div>
-  </div>
-</footer>
 
 
 

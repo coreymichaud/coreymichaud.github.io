@@ -11,9 +11,12 @@ about:
     - icon: linkedin
       text: LinkedIn
       href: https://www.linkedin.com/in/coreymichaud1/
-    - icon: envelope
+    - icon: envelope-fill
       text: Email
       href: mailto:cor3y.michaud@gmail.com
+    - icon: file-earmark-person-fill
+      text: Resume
+      href: "/files/Corey-Michaud-Resume.pdf"
 ---
 
 # Hey!

@@ -1,16 +1,23 @@
 project:
   type: website
   output-dir: docs
+  resources: 
+    - files
 
 website:
   title: "**Corey Michaud**"
+  favicon: images/stats.png
   navbar:
+    search: true
+    logo-alt: "Image of a graph."
+    tools-collapse: true
     left:
       - href: index.qmd
         text: Home
       - about.qmd
       - projects.qmd
-      - blog.qmd
+      - text: "Blog"
+        href: blog.qmd
     tools:
       - icon: github
         href: https://github.com/coreymichaud
@@ -18,13 +25,16 @@ website:
         href: https://www.linkedin.com/in/coreymichaud1/
       - icon: envelope
         href: mailto:cor3y.michaud@gmail.com
+  page-footer: 
+    left: "© Copyright 2024, Corey Michaud"
+    right: This website is built with <i class="fa-solid fa-heart"></i>, [<i class="fa-brands fa-github"></i>](https://github.com/coreymichaud/coreymichaud.github.io){target=_blank}, [<i class="fa-brands fa-r-project"></i>](https://www.r-project.org/about.html){target=_blank}, and [Quarto](https://quarto.org/){target=_blank}
 
 format:
   html:
-    theme: yeti
     css: styles.css
     toc: true
-
+    theme: theme.scss
+    
 execute:
   freeze: true
 

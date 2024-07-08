@@ -1,0 +1,126 @@
+/*-- scss:defaults --*/
+/* Variables */
+$background-color: #DAD7CD;
+$navbar-color: #344E41;
+$navbar-text-color: #A3B18A;
+$text-color: #000000;
+$button-color: #344E41;
+$hover-highlight-color: #344E41;
+$footer-bg: #DAD7CD;
+$toc-active-border: #a7c957;
+$toc-color: #a7c957;
+$link-color: #DB1619;
+$dropdown-bg: #A3B18A;
+
+/*-- scss:rules --*/
+/* Apply the background color */
+body {
+  background-color: $background-color;
+  color: $text-color;
+}
+
+/* Navbar styling */
+.navbar {
+  background-color: $navbar-color;
+  color: $navbar-text-color;
+
+  a {
+    color: $navbar-text-color;
+
+    &:hover {
+      color: $background-color;
+    }
+  }
+}
+
+/* Text colors */
+a {
+  color: $text-color;
+
+  &:hover {
+    color: $hover-highlight-color;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: $text-color;
+}
+
+/* Button styling */
+.btn {
+  background-color: $button-color;
+  color: $background-color;
+
+  &:hover {
+    background-color: $hover-highlight-color;
+    color: $background-color;
+  }
+}
+
+/* TOC highlight and hover colors */
+.toc a.active,
+.toc a.active:focus,
+.toc a.active:hover {
+  color: $hover-highlight-color; /* Highlight only the text */
+}
+
+.toc a:hover {
+  color: $hover-highlight-color; /* Hover only changes text color */
+}
+
+/* Additional specificity for other potential TOC styles */
+#TOC li.active > a,
+#TOC li > a:hover,
+#TOC li > a:focus {
+  color: $hover-highlight-color; /* Highlight only the text */
+}
+
+#TOC li > a {
+  color: $text-color;
+}
+
+/* Footer styling */
+footer {
+  background-color: $footer-bg; 
+  color: $text-color;
+}
+
+.post {
+  border-bottom: 1px solid $text-color; /* Ensures there's a border for blog posts */
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+}
+
+/* Blog post table styling */
+.table {
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  border-bottom: 1px solid $text-color; /* Separator line for table rows */
+  padding: 10px;
+}
+
+.table th {
+  background-color: $background-color;
+  color: $text-color;
+}
+
+.table tr:nth-child(odd) {
+  background-color: lighten($background-color, 10%);
+}
+
+.table tr:nth-child(even) {
+  background-color: $background-color;
+}
+
+header {
+  background-color: #your-desired-color;
+}
+
+/* Title banner styling */
+.quarto-title-banner { /* Replace with the correct class or id */
+  background-color: #A3B18A; /* Set title banner background color */
+  color: $text-color; /* Set title banner text color to black */
+  override-colors: $text-color;
+}

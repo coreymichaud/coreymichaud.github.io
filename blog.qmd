@@ -1,8 +1,10 @@
 ---
-title: "Blog"
+title: "The Statosphere"
 listing: 
   contents: blog # all Quarto docs in the `blog` directory will be included on your listing page
-  type: grid # or `default` or `table`; each type has its own set of yaml options to include
+  type: table # or `default` or `table`; each type has its own set of yaml options to include
   sort: "date desc" # can also sort on more than one field
-  categories: true # allows you to sort posts by assigned categories 
+  categories: true # allows you to sort posts by assigned categories
 ---
+
+Welcome to my blog, *The Statosphere*. Currently, this is a place where I can write while I do a lot of self-study on, but not limited to, statistics, machine learning, and various fields of mathematics. Hopefully by writing in a bloggy way, I can help myself learn while teaching you something new or interesting. So put your reading glasses on and get ready to enter The Statosphere.

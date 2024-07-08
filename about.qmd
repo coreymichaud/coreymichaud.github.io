@@ -2,6 +2,8 @@
 title: "About"
 ---
 
+---
+
 # <i class="fas fa-graduation-cap"></i> Education
 
 I graduated from the University of Central Florida in Spring of 2024 with a Bachelors of Science in Statistics. I majored in Statistics because throughout high school I was pretty good at math, and when I took AP Statistics I felt like it came naturally to me. Before I had decided, I "decided" on a new major every month in High School until I landed on statistics, and I'm glad I chose it.\
@@ -9,6 +11,8 @@ I graduated from the University of Central Florida in Spring of 2024 with a Bach
 During my time at UCF, I was a part of three clubs: The Association of Computing Machine, Knight Hacks, and AI\@UCF. Through these clubs I was able to hone my coding skills and learn about different subjects within machine learning. These clubs allowed me to attend seminars on different fields within computer science and I got hands-on experience with a number of algorithms. Knight Hacks holds one of the largest Florida Hackathons each year, and I was able to attend it for multiple times where I had to make small projects under a time constraint and constant pressure.
 
 Courses that I have taken include statistical methods, statistical theory, nonparametric statistics, calculus, linear algebra, machine learning, and time series. These have all helped me grow my knowledge of statistics and machine learning and apply it to case studies and numerous projects. I have covered other areas like Bayesian statistics and mathematical methods for artificial intelligence, but these have been spread out through some of my classes.
+
+---
 
 # <i class="fa-solid fa-screwdriver-wrench"></i> Skills
 
@@ -18,11 +22,15 @@ Data visualization has always interested me since I made my first "pretty" plot 
 
 Feel free to check out my projects tab where I showcase some of them! If you want to check out more, or the source code, then be sure to click on the GitHub icon in the navigation bar.
 
+---
+
 # <i class="fas fa-globe"></i> Hobbies
 
 When I'm not trying to learn new things, I like to play video games. Minecraft is an oldie but a goodie, and I sometimes like to play Hearthstone because you can multitask while playing the battlegrounds mode. I love watching movies, even ones people say are bad, but I *especially* like watching them in a movie theater. I feel like it's a lot more immersive and fun that way.\
 
 I'm not sure if this counts as a hobby, but exploring new areas excites me. Everything is new and interesting, and you get to feel what it's like to live in that area. When I still lived with my family, we would travel a lot and I got to experience national parks, loud cities, and nature that I don't get to experience in Florida. One thing I've learned recently is Florida has a lot of natural springs and to me, that feels like traveling because they're far from where I live, and they all feel different. Yes, they all have water to swim and kayak in, but the surrounding areas are unique in their own ways.
+
+---
 
 # <i class="fas fa-cat"></i> Cats
 
