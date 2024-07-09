@@ -1,11 +1,9 @@
 ---
 title: "Alzheimer's Detection" # This is the title of the blog post
 description: "This is a python notebook where I analyze the DAWRIN dataset to detect Alzheimer's in an individual's handwriting. To classify, I used random forest in Python." # This is the description and shows up under the title and picture on the blog page
-author: Corey Michaud # Use this for information about myself
 date: 06-31-2023 # Date this post is published
 categories: [Python, Machine Learning] # Self-defined categories
 image: "/projects/thumbnails/python.png" # This is the image that will be the preview image and it HAS to be in this file to work
-jupyter: python3
 ---
 
 <!-- This is the github button -->

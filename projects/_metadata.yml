@@ -1,0 +1,10 @@
+jupyter:
+  kernels:
+    - name: python
+      language: python
+      display_name: Python
+    - name: ir
+      language: R
+      display_name: R
+      
+  author: Corey Michaud

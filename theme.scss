@@ -11,6 +11,7 @@ $toc-active-border: #a7c957;
 $toc-color: #a7c957;
 $link-color: #DB1619;
 $dropdown-bg: #A3B18A;
+$code-block-bg: #282c34;
 
 /*-- scss:rules --*/
 /* Apply the background color */
@@ -123,4 +124,15 @@ header {
   background-color: #A3B18A; /* Set title banner background color */
   color: $text-color; /* Set title banner text color to black */
   override-colors: $text-color;
+}
+
+.listing-category,
+.quarto-category,
+.listing-category:active,
+.quarto-category:active,
+.listing-category:focus,
+.quarto-category:focus {
+  color: white !important;
+  background-color: #344E41 !important;
+  opacity: 1 !important;
 }
