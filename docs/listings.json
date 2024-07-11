@@ -2,13 +2,14 @@
   {
     "listing": "/blog.html",
     "items": [
-      "/blog/Blog Template/index.html",
       "/blog/06-27-2024-Industrial-Revolution/index.html"
     ]
   },
   {
     "listing": "/projects.html",
     "items": [
+      "/projects/la-crime-viz/index.html",
+      "/projects/nn-from-scratch/index.html",
       "/projects/alzheimers-detection/index.html"
     ]
   }

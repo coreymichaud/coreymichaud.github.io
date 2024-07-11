@@ -7,7 +7,14 @@ project:
 
 website:
   title: "**Corey Michaud**"
+  site-url: https://coreymichaud.github.io
+  description: "Corey Michaud's Portfolio"
   favicon: images/stats.png
+  open-graph: true
+  google-analytics: "G-843MGSESNK"
+  cookie-consent: 
+    style: headline
+  
   
   navbar:
     search: true
@@ -38,12 +45,17 @@ format:
   html:
     css: styles.css
     theme: theme.scss
+    include-in-header: head.html
     toc: true
     code-block-style: "bs5"
     highlight-style: "monokai"
-    
+    mainfont: "helvetica"
+    execute:
+      warning: false
+      message: false
+      
 execute:
-  freeze: true
+  freeze: auto
 
 editor: visual
 

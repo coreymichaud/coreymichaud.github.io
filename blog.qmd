@@ -5,6 +5,8 @@ listing:
   type: table # or `default` or `table`; each type has its own set of yaml options to include
   sort: "date desc" # can also sort on more than one field
   categories: true # allows you to sort posts by assigned categories
+  feed: true
+  fields: [date, title, author, reading-time]
 ---
 
 Welcome to my blog, *The Statosphere*. Currently, this is a place where I can write while I do a lot of self-study on, but not limited to, statistics, machine learning, and various fields of mathematics. Hopefully by writing in a bloggy way, I can help myself learn while teaching you something new or interesting. So put your reading glasses on and get ready to enter The Statosphere.

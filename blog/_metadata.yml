@@ -1,3 +1,7 @@
 freeze: auto # prevents posts from re-rendering unless explicitly told to do so
 
-title-block-banner: true # enable banner style title blocks
+author: Corey Michaud
+
+title-block-banner: true
+title-block-style: default
+title-block-banner-color: black

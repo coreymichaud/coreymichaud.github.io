@@ -79,7 +79,7 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-author',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-author','listing-reading-time',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
       
       searchColumns: ["listing-date","listing-title","listing-author"],
     };
@@ -130,7 +130,7 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="styles.css">
-</head>
+<link rel="alternate" type="application/rss+xml" title="**Corey Michaud**" href="blog.xml" data-external="1"></head>
 
 <body class="nav-fixed">
 
@@ -181,7 +181,7 @@ window.Quarto = {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(2)</span></div><div class="category" data-category="America">America <span class="quarto-category-count">(1)</span></div><div class="category" data-category="History">History <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Industrial Revolution">Industrial Revolution <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Insert category names in bracket with commas to separate">Insert category names in bracket with commas to separate <span class="quarto-category-count">(1)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(1)</span></div><div class="category" data-category="America">America <span class="quarto-category-count">(1)</span></div><div class="category" data-category="History">History <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Industrial Revolution">Industrial Revolution <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -247,21 +247,13 @@ window.Quarto = {
 <th>
 <a class="sort" data-sort="listing-author" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Author</a>
 </th>
+<th>
+Reading Time
+</th>
 </tr>
 </thead>
 <tbody class="list">
-<tr data-index="0" data-categories="Insert category names in bracket with commas to separate" data-listing-file-modified-sort="1720557204716" data-listing-reading-time-sort="1" data-listing-word-count-sort="44" data-listing-title-sort="Insert title" data-listing-filename-sort="index.qmd">
-<td>
-<span class="listing-date">&nbsp;</span>
-</td>
-<td>
-<a href="./blog/Blog Template/index.html" class="title listing-title">Insert title</a>
-</td>
-<td>
-<span class="listing-author">Corey Michaud</span>
-</td>
-</tr>
-<tr data-index="1" data-categories="America,Industrial Revolution,History" data-listing-date-sort="1719460800000" data-listing-file-modified-sort="1720557185696" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="619" data-listing-title-sort="The American Industrial Revolution" data-listing-filename-sort="index.qmd">
+<tr data-index="0" data-categories="America,Industrial Revolution,History" data-listing-date-sort="1719460800000" data-listing-file-modified-sort="1720721250620" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="619" data-listing-title-sort="The American Industrial Revolution" data-listing-filename-sort="index.qmd">
 <td>
 <span class="listing-date">Jun 27, 2024</span>
 </td>
@@ -270,6 +262,9 @@ window.Quarto = {
 </td>
 <td>
 <span class="listing-author">Corey Michaud</span>
+</td>
+<td>
+<span class="listing-reading-time">4 min</span>
 </td>
 </tr>
 </tbody>
@@ -370,7 +365,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
+      var filterRegex = new RegExp("https:\/\/coreymichaud\.github\.io");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }

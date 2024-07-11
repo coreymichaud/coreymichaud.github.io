@@ -21,3 +21,9 @@
     text-decoration: none;
     transition: background-color 0.3s ease;
 }
+
+div.quarto-post .thumbnail img {
+    margin-top: .4em;
+    width: 70%;
+    object-fit: cover;
+}

@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.47">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2024-07-11">
+<meta name="description" content="Visualization of crime in LA with R and ggplot2.">
+
+<title>Los Angeles Crime Visualized – Corey Michaud</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/stats.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title"><strong>Corey Michaud</strong></span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+</ul>
+              <div class="quarto-navbar-tools tools-wide">
+    <a href="https://github.com/coreymichaud" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+    <a href="https://www.linkedin.com/in/coreymichaud1/" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-linkedin"></i></a>
+    <a href="mailto:cor3y.michaud@gmail.com" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-envelope"></i></a>
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#loading-libraries" id="toc-loading-libraries" class="nav-link active" data-scroll-target="#loading-libraries">Loading Libraries</a></li>
+  <li><a href="#exploratory-data-analysis" id="toc-exploratory-data-analysis" class="nav-link" data-scroll-target="#exploratory-data-analysis">Exploratory Data Analysis</a>
+  <ul class="collapse">
+  <li><a href="#what-are-the-different-types-of-crimes-recorded" id="toc-what-are-the-different-types-of-crimes-recorded" class="nav-link" data-scroll-target="#what-are-the-different-types-of-crimes-recorded">What are the different types of crimes recorded?</a></li>
+  <li><a href="#how-many-of-the-crimes-were-only-attempted" id="toc-how-many-of-the-crimes-were-only-attempted" class="nav-link" data-scroll-target="#how-many-of-the-crimes-were-only-attempted">How many of the crimes were only attempted?</a></li>
+  <li><a href="#how-many-crimes-involved-stolen-property" id="toc-how-many-crimes-involved-stolen-property" class="nav-link" data-scroll-target="#how-many-crimes-involved-stolen-property">How many crimes involved stolen property?</a></li>
+  <li><a href="#which-days-had-the-most-amount-of-crime-the-least" id="toc-which-days-had-the-most-amount-of-crime-the-least" class="nav-link" data-scroll-target="#which-days-had-the-most-amount-of-crime-the-least">Which days had the most amount of crime? The least?</a></li>
+  </ul></li>
+  <li><a href="#graphing-the-data-and-conducting-statistical-analysis" id="toc-graphing-the-data-and-conducting-statistical-analysis" class="nav-link" data-scroll-target="#graphing-the-data-and-conducting-statistical-analysis">Graphing the Data and Conducting Statistical Analysis</a>
+  <ul class="collapse">
+  <li><a href="#which-areas-had-the-most-amount-of-crime-the-least" id="toc-which-areas-had-the-most-amount-of-crime-the-least" class="nav-link" data-scroll-target="#which-areas-had-the-most-amount-of-crime-the-least">Which areas had the most amount of crime? The least?</a></li>
+  <li><a href="#what-premise-had-a-crime-occur-the-most-the-least" id="toc-what-premise-had-a-crime-occur-the-most-the-least" class="nav-link" data-scroll-target="#what-premise-had-a-crime-occur-the-most-the-least">What premise had a crime occur the most? The least?</a></li>
+  <li><a href="#show-the-number-of-crimes-commited-per-age-of-victim" id="toc-show-the-number-of-crimes-commited-per-age-of-victim" class="nav-link" data-scroll-target="#show-the-number-of-crimes-commited-per-age-of-victim">Show the number of crimes commited per age of victim</a></li>
+  <li><a href="#how-many-crimes-occured-with-a-weapon-or-force" id="toc-how-many-crimes-occured-with-a-weapon-or-force" class="nav-link" data-scroll-target="#how-many-crimes-occured-with-a-weapon-or-force">How many crimes occured with a weapon or force?</a></li>
+  <li><a href="#is-there-a-difference-in-the-proportion-of-women-who-are-victim-of-a-crime-to-men" id="toc-is-there-a-difference-in-the-proportion-of-women-who-are-victim-of-a-crime-to-men" class="nav-link" data-scroll-target="#is-there-a-difference-in-the-proportion-of-women-who-are-victim-of-a-crime-to-men">Is there a difference in the proportion of women who are victim of a crime to men?</a></li>
+  <li><a href="#are-woman-victims-of-certain-crimes-more-often-than-men" id="toc-are-woman-victims-of-certain-crimes-more-often-than-men" class="nav-link" data-scroll-target="#are-woman-victims-of-certain-crimes-more-often-than-men">Are woman victims of certain crimes more often than men?</a></li>
+  <li><a href="#what-premise-had-the-most-vandalisms-the-least" id="toc-what-premise-had-the-most-vandalisms-the-least" class="nav-link" data-scroll-target="#what-premise-had-the-most-vandalisms-the-least">What premise had the most vandalisms? The least?</a></li>
+  <li><a href="#what-percent-of-crimes-are-still-being-investigated" id="toc-what-percent-of-crimes-are-still-being-investigated" class="nav-link" data-scroll-target="#what-percent-of-crimes-are-still-being-investigated">What percent of crimes are still being investigated?</a></li>
+  <li><a href="#are-certain-ethnic-groups-victims-of-crimes-more-often-than-others" id="toc-are-certain-ethnic-groups-victims-of-crimes-more-often-than-others" class="nav-link" data-scroll-target="#are-certain-ethnic-groups-victims-of-crimes-more-often-than-others">Are certain ethnic groups victims of crimes more often than others?</a></li>
+  <li><a href="#are-there-any-seasons-where-crime-is-more-frequent-less-frequent" id="toc-are-there-any-seasons-where-crime-is-more-frequent-less-frequent" class="nav-link" data-scroll-target="#are-there-any-seasons-where-crime-is-more-frequent-less-frequent">Are there any seasons where crime is more frequent? Less frequent?</a></li>
+  <li><a href="#is-there-a-certain-month-that-has-more-crime-yearly-than-others" id="toc-is-there-a-certain-month-that-has-more-crime-yearly-than-others" class="nav-link" data-scroll-target="#is-there-a-certain-month-that-has-more-crime-yearly-than-others">Is there a certain month that has more crime yearly than others?</a></li>
+  <li><a href="#has-crime-increased-over-time-in-any-area" id="toc-has-crime-increased-over-time-in-any-area" class="nav-link" data-scroll-target="#has-crime-increased-over-time-in-any-area">Has crime increased over time in any area?</a></li>
+  <li><a href="#are-there-certain-times-of-the-day-where-crime-occurs-more-what-about-day-vs-night" id="toc-are-there-certain-times-of-the-day-where-crime-occurs-more-what-about-day-vs-night" class="nav-link" data-scroll-target="#are-there-certain-times-of-the-day-where-crime-occurs-more-what-about-day-vs-night">Are there certain times of the day where crime occurs more? What about day vs night?</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Los Angeles Crime Visualized</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">R</div>
+    <div class="quarto-category">Visualization</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Visualization of crime in LA with R and ggplot2.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 11, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- This is the github button -->
+<p><a href="https://github.com/coreymichaud/LA-Crime-Visualized" class="btn" target="_blank"><i class="fab fa-github"></i> Source Code</a></p>
+<p>The data in this notebook was taken from https://data.lacity.org/Public-Safety/Crime-Data-from-2020-to-Present/2nrs-mtv8 and consists of crime data from Los Angeles, CA (2020-2024).</p>
+<p>All visualizations, statistics, and insights discussed are based on this dataset and time frame mentioned above only. The objective is to gain a comprehensive understanding of crime in Los Angeles through data exploration and visualization.</p>
+<p>The source code button above shows when I uploaded the data to GitHub in 2023, but as of 2024 this is the more updated version.</p>
+<section id="loading-libraries" class="level1">
+<h1>Loading Libraries</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Libraries</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exploratory-data-analysis" class="level1">
+<h1>Exploratory Data Analysis</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Importing dataset</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>crime <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"crime.csv"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(crime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      DR_NO              Date.Rptd               DATE.OCC TIME.OCC AREA
+1 190326475 03/01/2020 12:00:00 AM 03/01/2020 12:00:00 AM     2130    7
+2 200106753 02/09/2020 12:00:00 AM 02/08/2020 12:00:00 AM     1800    1
+3 200320258 11/11/2020 12:00:00 AM 11/04/2020 12:00:00 AM     1700    3
+4 200907217 05/10/2023 12:00:00 AM 03/10/2020 12:00:00 AM     2037    9
+5 220614831 08/18/2022 12:00:00 AM 08/17/2020 12:00:00 AM     1200    6
+6 231808869 04/04/2023 12:00:00 AM 12/01/2020 12:00:00 AM     2300   18
+  AREA.NAME Rpt.Dist.No Part.1.2 Crm.Cd
+1  Wilshire         784        1    510
+2   Central         182        1    330
+3 Southwest         356        1    480
+4  Van Nuys         964        1    343
+5 Hollywood         666        2    354
+6 Southeast        1826        2    354
+                               Crm.Cd.Desc             Mocodes Vict.Age
+1                         VEHICLE - STOLEN                            0
+2                    BURGLARY FROM VEHICLE      1822 1402 0344       47
+3                            BIKE - STOLEN           0344 1251       19
+4 SHOPLIFTING-GRAND THEFT ($950.01 &amp; OVER)           0325 1501       19
+5                        THEFT OF IDENTITY 1822 1501 0930 2004       28
+6                        THEFT OF IDENTITY 1822 0100 0930 0929       41
+  Vict.Sex Vict.Descent Premis.Cd                                  Premis.Desc
+1        M            O       101                                       STREET
+2        M            O       128            BUS STOP/LAYOVER (ALSO QUERY 124)
+3        X            X       502 MULTI-UNIT DWELLING (APARTMENT, DUPLEX, ETC)
+4        M            O       405                               CLOTHING STORE
+5        M            H       102                                     SIDEWALK
+6        M            H       501                       SINGLE FAMILY DWELLING
+  Weapon.Used.Cd Weapon.Desc Status  Status.Desc Crm.Cd.1 Crm.Cd.2 Crm.Cd.3
+1             NA                 AA Adult Arrest      510      998       NA
+2             NA                 IC  Invest Cont      330      998       NA
+3             NA                 IC  Invest Cont      480       NA       NA
+4             NA                 IC  Invest Cont      343       NA       NA
+5             NA                 IC  Invest Cont      354       NA       NA
+6             NA                 IC  Invest Cont      354       NA       NA
+  Crm.Cd.4                                 LOCATION Cross.Street     LAT
+1       NA  1900 S  LONGWOOD                     AV              34.0375
+2       NA  1000 S  FLOWER                       ST              34.0444
+3       NA  1400 W  37TH                         ST              34.0210
+4       NA 14000    RIVERSIDE                    DR              34.1576
+5       NA                        1900    TRANSIENT              34.0944
+6       NA  9900    COMPTON                      AV              33.9467
+        LON
+1 -118.3506
+2 -118.2628
+3 -118.3002
+4 -118.4387
+5 -118.3277
+6 -118.2463</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Changing Date.Rptd and DATE.OCC to date format</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>crime<span class="sc">$</span>Date.Rptd <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(crime<span class="sc">$</span>Date.Rptd, <span class="at">format =</span> <span class="st">"%m/%d/%Y"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>crime<span class="sc">$</span>DATE.OCC <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(crime<span class="sc">$</span>DATE.OCC, <span class="at">format =</span> <span class="st">"%m/%d/%Y"</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>times_char <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">"%04d"</span>, crime<span class="sc">$</span>TIME.OCC)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>datetime <span class="ot">&lt;-</span> <span class="fu">strptime</span>(times_char, <span class="at">format =</span> <span class="st">"%H%M"</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>crime<span class="sc">$</span>TIME.OCC <span class="ot">&lt;-</span> <span class="fu">format</span>(datetime, <span class="at">format =</span> <span class="st">"%H:%M"</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(crime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      DR_NO  Date.Rptd   DATE.OCC TIME.OCC AREA AREA.NAME Rpt.Dist.No Part.1.2
+1 190326475 2020-03-01 2020-03-01    21:30    7  Wilshire         784        1
+2 200106753 2020-02-09 2020-02-08    18:00    1   Central         182        1
+3 200320258 2020-11-11 2020-11-04    17:00    3 Southwest         356        1
+4 200907217 2023-05-10 2020-03-10    20:37    9  Van Nuys         964        1
+5 220614831 2022-08-18 2020-08-17    12:00    6 Hollywood         666        2
+6 231808869 2023-04-04 2020-12-01    23:00   18 Southeast        1826        2
+  Crm.Cd                              Crm.Cd.Desc             Mocodes Vict.Age
+1    510                         VEHICLE - STOLEN                            0
+2    330                    BURGLARY FROM VEHICLE      1822 1402 0344       47
+3    480                            BIKE - STOLEN           0344 1251       19
+4    343 SHOPLIFTING-GRAND THEFT ($950.01 &amp; OVER)           0325 1501       19
+5    354                        THEFT OF IDENTITY 1822 1501 0930 2004       28
+6    354                        THEFT OF IDENTITY 1822 0100 0930 0929       41
+  Vict.Sex Vict.Descent Premis.Cd                                  Premis.Desc
+1        M            O       101                                       STREET
+2        M            O       128            BUS STOP/LAYOVER (ALSO QUERY 124)
+3        X            X       502 MULTI-UNIT DWELLING (APARTMENT, DUPLEX, ETC)
+4        M            O       405                               CLOTHING STORE
+5        M            H       102                                     SIDEWALK
+6        M            H       501                       SINGLE FAMILY DWELLING
+  Weapon.Used.Cd Weapon.Desc Status  Status.Desc Crm.Cd.1 Crm.Cd.2 Crm.Cd.3
+1             NA                 AA Adult Arrest      510      998       NA
+2             NA                 IC  Invest Cont      330      998       NA
+3             NA                 IC  Invest Cont      480       NA       NA
+4             NA                 IC  Invest Cont      343       NA       NA
+5             NA                 IC  Invest Cont      354       NA       NA
+6             NA                 IC  Invest Cont      354       NA       NA
+  Crm.Cd.4                                 LOCATION Cross.Street     LAT
+1       NA  1900 S  LONGWOOD                     AV              34.0375
+2       NA  1000 S  FLOWER                       ST              34.0444
+3       NA  1400 W  37TH                         ST              34.0210
+4       NA 14000    RIVERSIDE                    DR              34.1576
+5       NA                        1900    TRANSIENT              34.0944
+6       NA  9900    COMPTON                      AV              33.9467
+        LON
+1 -118.3506
+2 -118.2628
+3 -118.3002
+4 -118.4387
+5 -118.3277
+6 -118.2463</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Finding dimension of crime dataset</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(crime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 959241     28</code></pre>
+</div>
+</div>
+<p>This dataset has 959,241 rows and 28 columns.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Applying NA function to each column</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>crime_is_na <span class="ot">&lt;-</span> <span class="fu">sapply</span>(crime, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>crime_is_na[<span class="fu">which</span>(crime_is_na <span class="sc">&gt;</span> <span class="dv">0</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Premis.Cd Weapon.Used.Cd       Crm.Cd.1       Crm.Cd.2       Crm.Cd.3 
+            13         634058             11         890716         956944 
+      Crm.Cd.4 
+        959177 </code></pre>
+</div>
+</div>
+<p>Premis.Cd has some missing values. Weapon.Used.Cd has so many missing values because not all recorded crimes involve a weapon, and Crm.Cd.2-4 have many missing values because they will only have a value if more than 1 crime was committed in the same instance. I will not be removing any rows that contain missing values because if I do, there will not be nearly as much data. As a result, I will account for missing values during statistical tests.</p>
+<section id="what-are-the-different-types-of-crimes-recorded" class="level3">
+<h3 class="anchored" data-anchor-id="what-are-the-different-types-of-crimes-recorded">What are the different types of crimes recorded?</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Finding length of crime list</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">table</span>(crime<span class="sc">$</span>Crm.Cd.Desc))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 139</code></pre>
+</div>
+</div>
+<p>There are 139 different types of crimes that have been committed.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sorting the number of occurrences for each crime</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>sorted_crimes <span class="ot">&lt;-</span> <span class="fu">table</span>(crime<span class="sc">$</span>Crm.Cd.Desc) <span class="sc">%&gt;%</span> <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There are too many crimes to print out the name of each one, but if you’d like you can download this rmd and print the sorted_crimes variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sorted_crimes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+                                       VEHICLE - STOLEN 
+                                                 105537 
+                               BATTERY - SIMPLE ASSAULT 
+                                                  74596 
+                                  BURGLARY FROM VEHICLE 
+                                                  59476 
+                                      THEFT OF IDENTITY 
+                                                  59327 
+VANDALISM - FELONY ($400 &amp; OVER, ALL CHURCH VANDALISMS) 
+                                                  58180 
+                                               BURGLARY 
+                                                  57597 </code></pre>
+</div>
+</div>
+<p>Here are the 5 highest occurring crimes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(sorted_crimes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+      INCEST (SEXUAL ACTS BETWEEN BLOOD RELATIVES) 
+                                                 6 
+                     THEFT, COIN MACHINE - ATTEMPT 
+                                                 6 
+FIREARMS EMERGENCY PROTECTIVE ORDER (FIREARMS EPO) 
+                                                 5 
+                DISHONEST EMPLOYEE ATTEMPTED THEFT 
+                                                 4 
+          FIREARMS RESTRAINING ORDER (FIREARMS RO) 
+                                                 4 
+                                    TRAIN WRECKING 
+                                                 1 </code></pre>
+</div>
+</div>
+<p>Here are the 5 lowest occurring crimes.</p>
+</section>
+<section id="how-many-of-the-crimes-were-only-attempted" class="level3">
+<h3 class="anchored" data-anchor-id="how-many-of-the-crimes-were-only-attempted">How many of the crimes were only attempted?</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Finding number of crimes with "ATTEMPT" in title</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">grepl</span>(<span class="st">"ATTEMPT"</span>, crime<span class="sc">$</span>Crm.Cd.Desc, <span class="at">ignore.case =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 15716</code></pre>
+</div>
+</div>
+<p>Out of all the crimes committed, 15,716 of them were attempts.</p>
+</section>
+<section id="how-many-crimes-involved-stolen-property" class="level3">
+<h3 class="anchored" data-anchor-id="how-many-crimes-involved-stolen-property">How many crimes involved stolen property?</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Finding number of crimes with "STOLEN" in title</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">grepl</span>(<span class="st">"STOLEN"</span>, crime<span class="sc">$</span>Crm.Cd.Desc, <span class="at">ignore.case =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 122940</code></pre>
+</div>
+</div>
+<p>Out of all the crimes committed, 122,940 of them involved stolen property.</p>
+</section>
+<section id="which-days-had-the-most-amount-of-crime-the-least" class="level3">
+<h3 class="anchored" data-anchor-id="which-days-had-the-most-amount-of-crime-the-least">Which days had the most amount of crime? The least?</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sorting dates of crimes based on how many occurred that day</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>date_occ_counts <span class="ot">&lt;-</span> crime <span class="sc">%&gt;%</span> <span class="fu">count</span>(DATE.OCC) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(date_occ_counts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    DATE.OCC    n
+1 2020-01-01 1149
+2 2023-01-01 1137
+3 2022-12-02 1132
+4 2023-02-01 1090
+5 2022-10-01 1077
+6 2022-12-01 1056</code></pre>
+</div>
+</div>
+<p>The date with the most amount of crime is 01/01/2020 with 1149 instances.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(date_occ_counts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       DATE.OCC   n
+1646 2024-07-03 189
+1647 2024-07-05 172
+1648 2024-07-04 171
+1649 2024-07-06 170
+1650 2024-07-07 121
+1651 2024-07-08  48</code></pre>
+</div>
+</div>
+<p>The date with the least amount of crime is 07/08/2024 with 48 instances.</p>
+</section>
+</section>
+<section id="graphing-the-data-and-conducting-statistical-analysis" class="level1">
+<h1>Graphing the Data and Conducting Statistical Analysis</h1>
+<section id="which-areas-had-the-most-amount-of-crime-the-least" class="level3">
+<h3 class="anchored" data-anchor-id="which-areas-had-the-most-amount-of-crime-the-least">Which areas had the most amount of crime? The least?</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>area_name_counts <span class="ot">&lt;-</span> crime <span class="sc">%&gt;%</span> <span class="fu">count</span>(AREA.NAME) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">head</span>(area_name_counts, <span class="dv">7</span>), <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_inorder</span>(AREA.NAME), <span class="at">y =</span> n, <span class="at">fill =</span> <span class="fu">fct_inorder</span>(AREA.NAME))) <span class="sc">+</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> n), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Area"</span>, <span class="at">y =</span> <span class="st">"# of Crimes Comitted"</span>, <span class="at">title =</span> <span class="st">"Areas with the Highest Number of Crimes Comitted"</span>) <span class="sc">+</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>), <span class="at">legend.position =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">60000</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The area with the highest amount of crime is77th Street with 59,889 reported cases.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">tail</span>(area_name_counts, <span class="dv">7</span>), <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_inorder</span>(AREA.NAME), <span class="at">y =</span> n, <span class="at">fill =</span> <span class="fu">fct_inorder</span>(AREA.NAME))) <span class="sc">+</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> n), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Area"</span>, <span class="at">y =</span> <span class="st">"# of Crimes Comitted"</span>, <span class="at">title =</span> <span class="st">"Areas with the Lowest Number of Crimes Comitted"</span>) <span class="sc">+</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>), <span class="at">legend.position =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">40000</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The area with the lowest amount of crime is Foothill with 31,928 reported cases.</p>
+</section>
+<section id="what-premise-had-a-crime-occur-the-most-the-least" class="level3">
+<h3 class="anchored" data-anchor-id="what-premise-had-a-crime-occur-the-most-the-least">What premise had a crime occur the most? The least?</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>premise_counts <span class="ot">&lt;-</span> crime <span class="sc">%&gt;%</span> <span class="fu">count</span>(Premis.Desc) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">head</span>(premise_counts, <span class="dv">7</span>), <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_inorder</span>(Premis.Desc), <span class="at">y =</span> n, <span class="at">fill =</span> <span class="fu">fct_inorder</span>(Premis.Desc))) <span class="sc">+</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> n), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Premise"</span>, <span class="at">y =</span> <span class="st">"# of Crimes"</span>, <span class="at">title =</span> <span class="st">"Premise Where Crime Occured the Most"</span>) <span class="sc">+</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>), <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks.x =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">220000</span>)) <span class="sc">+</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">title =</span> <span class="st">"Legend"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The premise where the most crime occurs are single family dwellings.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">tail</span>(premise_counts, <span class="dv">7</span>), <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_inorder</span>(Premis.Desc), <span class="at">y =</span> n, <span class="at">fill =</span> <span class="fu">fct_inorder</span>(Premis.Desc))) <span class="sc">+</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> n), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Premise"</span>, <span class="at">y =</span> <span class="st">"# of Crimes"</span>, <span class="at">title =</span> <span class="st">"Premise Where Crime Occured the Least"</span>) <span class="sc">+</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>), <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks.x =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">2.2</span>)) <span class="sc">+</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">title =</span> <span class="st">"Legend"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The premise where the least crime occurs are trams/streetcars.</p>
+</section>
+<section id="show-the-number-of-crimes-commited-per-age-of-victim" class="level3">
+<h3 class="anchored" data-anchor-id="show-the-number-of-crimes-commited-per-age-of-victim">Show the number of crimes commited per age of victim</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>crime_per_age <span class="ot">&lt;-</span> <span class="fu">table</span>(crime<span class="sc">$</span>Vict.Age)[<span class="dv">5</span><span class="sc">:</span><span class="dv">103</span>] <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(crime_per_age, <span class="fu">aes</span>(<span class="at">x =</span> Var1, <span class="at">y =</span> Freq, <span class="at">fill =</span> Var1)) <span class="sc">+</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Age of Victim"</span>, <span class="at">y =</span> <span class="st">"# of Crimes"</span>, <span class="at">title =</span> <span class="st">"Number of Crimes per Victim Age"</span>) <span class="sc">+</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>), <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">5</span>), <span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can see most victims are aged 19-50, where more children and elderly people are less victimized.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating age groups</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>crime_per_age<span class="sc">$</span>group <span class="ot">&lt;-</span> <span class="fu">cut</span>(<span class="fu">as.numeric</span>(crime_per_age<span class="sc">$</span>Var1), <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">12</span>, <span class="dv">17</span>, <span class="dv">24</span>, <span class="dv">39</span>, <span class="dv">59</span>, <span class="dv">120</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"1-12"</span>, <span class="st">"13-17"</span>, <span class="st">"18-24"</span>, <span class="st">"25-39"</span>, <span class="st">"40-59"</span>, <span class="st">"60-120"</span>))</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Finding age group proportions</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>crime_per_age <span class="ot">&lt;-</span> crime_per_age <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(group) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Proportion =</span> Freq <span class="sc">/</span> <span class="fu">sum</span>(Freq))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(crime_per_age, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> Proportion, <span class="at">fill =</span> group)) <span class="sc">+</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>() <span class="sc">+</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> median, <span class="at">geom=</span><span class="st">"point"</span>, <span class="at">size=</span><span class="dv">2</span>, <span class="at">color=</span><span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Age Group"</span>, <span class="at">y =</span> <span class="st">"Proportion"</span>, <span class="at">title =</span> <span class="st">"Distribution of Crime Proportions by Age Group"</span>) <span class="sc">+</span> </span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>From the violin chart, we can see the age group with the highest number of victims is 13-17. The red dots, representing the median, show the 13-17 age group takes up about 20% of the data. The lowest proportion group is the 60-120 year old group, likely due to the older individuals having less chance to become victim of a crime and it is skewed.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(crime[crime<span class="sc">$</span>Vict.Age <span class="sc">&gt;</span> <span class="dv">0</span>,], <span class="fu">aes</span>(<span class="at">x =</span> Vict.Age)) <span class="sc">+</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">"green"</span>) <span class="sc">+</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Age"</span>, <span class="at">title =</span> <span class="st">"Victim Age"</span>) <span class="sc">+</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Median age of victim seems to be around 37 years old with an IQR of approximately 28-50 years old.</p>
+</section>
+<section id="how-many-crimes-occured-with-a-weapon-or-force" class="level3">
+<h3 class="anchored" data-anchor-id="how-many-crimes-occured-with-a-weapon-or-force">How many crimes occured with a weapon or force?</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Finding number of crimes committed with a weapon</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>crime_weapon_na_count <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(crime<span class="sc">$</span>Weapon.Used.Cd))</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>crime_weapon_count <span class="ot">&lt;-</span> <span class="dv">788767</span> <span class="sc">-</span> crime_weapon_na_count</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>weapons <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">Weapon =</span> <span class="fu">c</span>(<span class="st">"Yes"</span>, <span class="st">"No"</span>),</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">cc =</span> <span class="fu">c</span>(crime_weapon_count, crime_weapon_na_count)</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(weapons, <span class="fu">aes</span>(<span class="at">x =</span> Weapon, <span class="at">y =</span> cc, <span class="at">fill =</span> Weapon)) <span class="sc">+</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Weapon"</span>, <span class="at">y =</span> <span class="st">"Counts"</span>, <span class="at">title =</span> <span class="st">"How Many Crimes Were Committed With A Weapon?"</span>) <span class="sc">+</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can see there’s less crimes committed with a weapon than without one, more than a third less.</p>
+</section>
+<section id="is-there-a-difference-in-the-proportion-of-women-who-are-victim-of-a-crime-to-men" class="level3">
+<h3 class="anchored" data-anchor-id="is-there-a-difference-in-the-proportion-of-women-who-are-victim-of-a-crime-to-men">Is there a difference in the proportion of women who are victim of a crime to men?</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>male_victims <span class="ot">&lt;-</span> <span class="fu">subset</span>(crime, Vict.Sex <span class="sc">==</span> <span class="st">"M"</span>)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>female_victims <span class="ot">&lt;-</span> <span class="fu">subset</span>(crime, Vict.Sex <span class="sc">==</span> <span class="st">"F"</span>)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.test</span>(</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="fu">nrow</span>(female_victims), <span class="fu">nrow</span>(male_victims)),</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> <span class="fu">c</span>(<span class="dv">788767</span>,<span class="dv">788767</span>)</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    2-sample test for equality of proportions with continuity correction
+
+data:  c(nrow(female_victims), nrow(male_victims)) out of c(788767, 788767)
+X-squared = 4590.5, df = 1, p-value &lt; 2.2e-16
+alternative hypothesis: two.sided
+95 percent confidence interval:
+ -0.05538834 -0.05227591
+sample estimates:
+   prop 1    prop 2 
+0.4407461 0.4945782 </code></pre>
+</div>
+</div>
+<p>With a p-value close to 0 and an alpha level of 0.05, we can reject the null hypothesis and state that the true proportion of victims of a crime who are woman or who are men are different.</p>
+</section>
+<section id="are-woman-victims-of-certain-crimes-more-often-than-men" class="level3">
+<h3 class="anchored" data-anchor-id="are-woman-victims-of-certain-crimes-more-often-than-men">Are woman victims of certain crimes more often than men?</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>gender_crime <span class="ot">&lt;-</span> <span class="fu">subset</span>(crime, Vict.Sex <span class="sc">==</span> <span class="st">"M"</span> <span class="sc">|</span> Vict.Sex <span class="sc">==</span> <span class="st">"F"</span>)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Using Chi-Square test of Independence</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(<span class="fu">table</span>(gender_crime<span class="sc">$</span>Vict.Sex, gender_crime<span class="sc">$</span>Crm.Cd.Desc))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test
+
+data:  table(gender_crime$Vict.Sex, gender_crime$Crm.Cd.Desc)
+X-squared = 75535, df = 136, p-value &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>With a p-value close to 0 and an alpha level of 0.05, we can reject the null hypothesis, indicating a statistically significant association between gender and crime type on an individual.</p>
+</section>
+<section id="what-premise-had-the-most-vandalisms-the-least" class="level3">
+<h3 class="anchored" data-anchor-id="what-premise-had-the-most-vandalisms-the-least">What premise had the most vandalisms? The least?</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Counting number of vandalism reports at each premise</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>premise_vandalisms <span class="ot">&lt;-</span> crime <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">grepl</span>(<span class="st">"VANDALISM"</span>, Crm.Cd.Desc, <span class="at">ignore.case =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(Premis.Desc) <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">Count =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(Count))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">head</span>(premise_vandalisms, <span class="dv">10</span>), <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_inorder</span>(Premis.Desc), <span class="at">y =</span> Count)) <span class="sc">+</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_inorder</span>(Premis.Desc), <span class="at">xend =</span> Premis.Desc, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">yend =</span> Count)) <span class="sc">+</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"orange"</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Premise"</span>, <span class="at">y =</span> <span class="st">"Count"</span>, <span class="at">title =</span> <span class="st">"Most # of Vandalisms at Premises in LA"</span>) <span class="sc">+</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_light</span>() <span class="sc">+</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>), <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>), </span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>(), <span class="at">panel.border =</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.margin =</span> <span class="fu">margin</span>(<span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">10</span>,<span class="dv">10</span>), <span class="at">unit =</span> <span class="st">"pt"</span>)</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The premise with the highest number of reported vandalism are vehicles (passenger/trucks).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">tail</span>(premise_vandalisms, <span class="dv">10</span>), <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_inorder</span>(Premis.Desc), <span class="at">y =</span> Count)) <span class="sc">+</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_inorder</span>(Premis.Desc), <span class="at">xend =</span> Premis.Desc, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">yend =</span> Count)) <span class="sc">+</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"orange"</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Premise"</span>, <span class="at">y =</span> <span class="st">"Count"</span>, <span class="at">title =</span> <span class="st">"Most # of Vandalisms at Premises in LA"</span>) <span class="sc">+</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_light</span>() <span class="sc">+</span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>), <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>), </span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>(), <span class="at">panel.border =</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.margin =</span> <span class="fu">margin</span>(<span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">10</span>,<span class="dv">10</span>), <span class="at">unit =</span> <span class="st">"pt"</span>)</span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Some MTA lines have the lowest number of vandalisms, with only 1 recorded, as well as a skating rink and tool shed having only 1 instance. In fact, there’s many more which only have 1 reported vandalism.</p>
+</section>
+<section id="what-percent-of-crimes-are-still-being-investigated" class="level3">
+<h3 class="anchored" data-anchor-id="what-percent-of-crimes-are-still-being-investigated">What percent of crimes are still being investigated?</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">grepl</span>(<span class="st">"Cont"</span>, crime<span class="sc">$</span>Status.Desc, <span class="at">ignore.case =</span> <span class="cn">TRUE</span>)) <span class="sc">/</span> <span class="fu">nrow</span>(crime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7979997</code></pre>
+</div>
+</div>
+<p>79.80% of crimes are still being investigated.</p>
+</section>
+<section id="are-certain-ethnic-groups-victims-of-crimes-more-often-than-others" class="level3">
+<h3 class="anchored" data-anchor-id="are-certain-ethnic-groups-victims-of-crimes-more-often-than-others">Are certain ethnic groups victims of crimes more often than others?</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>descent_table <span class="ot">&lt;-</span> <span class="fu">table</span>(crime<span class="sc">$</span>Vict.Descent)[<span class="dv">3</span><span class="sc">:</span><span class="dv">21</span>]</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">length</span>(descent_table), <span class="fu">length</span>(descent_table))</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(descent_table, <span class="at">p =</span> prob)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Chi-squared test for given probabilities
+
+data:  descent_table
+X-squared = 2713681, df = 18, p-value &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>With a p-value is close to 0, and alpha = 0.5, we can reject the null and state that ethnic groups are not equally as likely to be targeted for a crime.</p>
+</section>
+<section id="are-there-any-seasons-where-crime-is-more-frequent-less-frequent" class="level3">
+<h3 class="anchored" data-anchor-id="are-there-any-seasons-where-crime-is-more-frequent-less-frequent">Are there any seasons where crime is more frequent? Less frequent?</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Grouping the date and number of crimes</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>daily_crime <span class="ot">&lt;-</span> crime <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(DATE.OCC) <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">Count =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(daily_crime, <span class="fu">aes</span>(<span class="at">x =</span> DATE.OCC, <span class="at">y =</span> Count)) <span class="sc">+</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> <span class="fu">year</span>(DATE.OCC), <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Time"</span>, <span class="at">title =</span> <span class="st">"Crime over Time"</span>) <span class="sc">+</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_date</span>(<span class="at">date_breaks =</span> <span class="st">"1 month"</span>, <span class="at">date_labels =</span> <span class="st">"%b"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>It seems like the beginning of each month there’s a spike in crime where the biggest spike is in January.</p>
+</section>
+<section id="is-there-a-certain-month-that-has-more-crime-yearly-than-others" class="level3">
+<h3 class="anchored" data-anchor-id="is-there-a-certain-month-that-has-more-crime-yearly-than-others">Is there a certain month that has more crime yearly than others?</h3>
+<p>If we take a look at crime from the graph above, we can see that there’s not really a specific month that generally has more or less crime than others.</p>
+</section>
+<section id="has-crime-increased-over-time-in-any-area" class="level3">
+<h3 class="anchored" data-anchor-id="has-crime-increased-over-time-in-any-area">Has crime increased over time in any area?</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Grouping the top 12 areas by date and number of crimes</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>selected <span class="ot">&lt;-</span> area_name_counts[<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>,<span class="dv">1</span>]</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>filtered_crime <span class="ot">&lt;-</span> crime <span class="sc">%&gt;%</span> <span class="fu">filter</span>(AREA.NAME <span class="sc">%in%</span> selected)</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>crime_time_area <span class="ot">&lt;-</span> filtered_crime <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(DATE.OCC, AREA.NAME) <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">Count =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(crime_time_area, <span class="fu">aes</span>(<span class="at">x =</span> DATE.OCC, <span class="at">y =</span> Count)) <span class="sc">+</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> AREA.NAME, <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Time"</span>, <span class="at">title =</span> <span class="st">"Crime over Time"</span>) <span class="sc">+</span></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stat_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>No area seems to have a significant increase in crime over time, but some areas like Central, Newton, Olympic, Pacific, and West LA do have some increase in crime. The areas all seem to have some major spikes in crime on certain days, but nothing that overlaps with each other.</p>
+</section>
+<section id="are-there-certain-times-of-the-day-where-crime-occurs-more-what-about-day-vs-night" class="level3">
+<h3 class="anchored" data-anchor-id="are-there-certain-times-of-the-day-where-crime-occurs-more-what-about-day-vs-night">Are there certain times of the day where crime occurs more? What about day vs night?</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert military time to hours and minutes</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>hours <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">substr</span>(crime<span class="sc">$</span>TIME.OCC, <span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>minutes <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">substr</span>(crime<span class="sc">$</span>TIME.OCC, <span class="dv">4</span>, <span class="dv">5</span>))</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the intervals</span></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>interval <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">"%02d:%02d"</span>, <span class="fu">floor</span>((hours <span class="sc">*</span> <span class="dv">60</span> <span class="sc">+</span> minutes) <span class="sc">%/%</span> <span class="dv">30</span> <span class="sc">/</span> <span class="dv">2</span>), ((hours <span class="sc">*</span> <span class="dv">60</span> <span class="sc">+</span> minutes) <span class="sc">%/%</span> <span class="dv">30</span> <span class="sc">%%</span> <span class="dv">2</span>) <span class="sc">*</span> <span class="dv">30</span>)</span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>interval_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">table</span>(interval))</span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a>number_of_bar <span class="ot">&lt;-</span> <span class="fu">nrow</span>(interval_df)</span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a>angle <span class="ot">&lt;-</span> <span class="dv">90</span> <span class="sc">-</span> <span class="dv">360</span> <span class="sc">*</span> (<span class="fu">as.numeric</span>(interval_df<span class="sc">$</span>interval) <span class="sc">-</span> <span class="fl">0.5</span>) <span class="sc">/</span> number_of_bar</span>
+<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-12"><a href="#cb54-12" aria-hidden="true" tabindex="-1"></a>interval_df<span class="sc">$</span>angle<span class="ot">&lt;-</span><span class="fu">ifelse</span>(angle <span class="sc">&lt;</span> <span class="sc">-</span><span class="dv">90</span>, angle <span class="sc">+</span> <span class="dv">180</span>, angle)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot of crime frequency per 30 minutes</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(interval_df, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(interval), <span class="at">y =</span> Freq, <span class="at">fill =</span> Freq)) <span class="sc">+</span></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> interval, <span class="at">y =</span> Freq, <span class="at">label =</span> interval, <span class="at">hjust =</span> <span class="dv">0</span>), </span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">angle =</span> angle, </span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">"green"</span>, <span class="at">high =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb55-11"><a href="#cb55-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb55-12"><a href="#cb55-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb55-13"><a href="#cb55-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.margin =</span> <span class="fu">unit</span>(<span class="fu">rep</span>(<span class="sc">-</span><span class="fl">0.5</span>, <span class="dv">4</span>), <span class="st">"cm"</span>)</span>
+<span id="cb55-14"><a href="#cb55-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb55-15"><a href="#cb55-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="at">start =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb55-16"><a href="#cb55-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">30000</span>, <span class="dv">40000</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can see that as the time of day increases, the frequency of crime increases, but there is a major spike at noon (12:00).</p>
+<p>If you’ve made it to the end thank you! I am trying to upload projects using Quarto and I’m still getting used to everything, so I hope to make this prettier eventually!</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/coreymichaud\.github\.io");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© Copyright 2024, Corey Michaud</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>This website is built with <i class="fa-solid fa-heart"></i>, <a href="https://github.com/coreymichaud/coreymichaud.github.io" target="_blank"><i class="fa-brands fa-github"></i></a>, <a href="https://www.r-project.org/about.html" target="_blank"><i class="fa-brands fa-r-project"></i></a>, and <a href="https://quarto.org/" target="_blank">Quarto</a></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
