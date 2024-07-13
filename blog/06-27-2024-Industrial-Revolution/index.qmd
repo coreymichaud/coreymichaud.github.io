@@ -2,6 +2,7 @@
 title: "The American Industrial Revolution" # Blog post title
 description: "An indepth analysis of the American industrial revolution." # Blog description
 date: 06-27-2024 # Date this post is published
+url: https://coreymichaud.github.io/blog/06-27-2024-Industrial-Revolution/
 categories: [America, Industrial Revolution, History] # Self-defined categories separated by commas
 ---
 
