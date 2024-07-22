@@ -1,0 +1,30 @@
+---
+title: "Let's Talk Metrics"
+description: "A machine learning model can have a high accuracy, but does that mean it actually performs well? Let's talk metrics and find out."
+date: 07-15-2024
+categories: [Machine Learning, Metrics]
+---
+
+Hi
+
+------------------------------------------------------------------------
+
+# Support <i class="fa-solid fa-heart"></i> {.unlisted}
+
+You've reached the end of my blog post! 🎉🎉🎉\
+If you learned something and would like to support me, feel free to buy me a coffee :)
+
+```{=html}
+<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="coreymiichaud" data-color="#FFDD00" data-emoji=""  data-font="Poppins" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script>
+```
+# Comments {.unlisted}
+
+```{=html}
+<script src="https://utteranc.es/client.js"
+        repo="coreymichaud/coreymichaud.github.io"
+        issue-term="url"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+```

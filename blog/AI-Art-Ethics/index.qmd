@@ -1,0 +1,33 @@
+---
+title: "Is AI Art Bad?" # Blog post title
+description: "Computers can now generate images through an artificial neural network, but is it considered art? Let's take a dive into the world of art and machine learning together." # Blog description
+date: 07-08-2024 # Date this post is published
+url: coreymichaud.github.io/blog/AI-Art-Ethics
+categories: [Dall-E 3, Deep Learning] # Self-defined categories separated by commas
+---
+
+# Introduction
+
+Art made by artificial intelligence has been booming lately because of image generation models like OpenAI's Dall-E 3. These models have been used to create images that a lot of people call art, but is it really considered art at all? What are the ethics behind it? Does prompt engineering really mean a computer can generate art like a human can?
+
+------------------------------------------------------------------------
+
+# Support <i class="fa-solid fa-heart"></i> {.unlisted}
+
+You've reached the end of my blog post! 🎉🎉🎉\
+If you learned something and would like to support me, feel free to buy me a coffee :)
+
+```{=html}
+<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="coreymiichaud" data-color="#FFDD00" data-emoji=""  data-font="Poppins" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script>
+```
+# Comments {.unlisted}
+
+```{=html}
+<script src="https://utteranc.es/client.js"
+        repo="coreymichaud/coreymichaud.github.io"
+        issue-term="url"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+```

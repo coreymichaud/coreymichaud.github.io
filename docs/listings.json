@@ -2,7 +2,7 @@
   {
     "listing": "/blog.html",
     "items": [
-      "/blog/06-27-2024-Industrial-Revolution/index.html"
+      "/blog/Text-Preprocessing-NLP/index.html"
     ]
   },
   {
@@ -11,6 +11,21 @@
       "/projects/la-crime-viz/index.html",
       "/projects/nn-from-scratch/index.html",
       "/projects/alzheimers-detection/index.html"
+    ]
+  },
+  {
+    "listing": "/blog/blog.html",
+    "items": []
+  },
+  {
+    "listing": "/blog/index.html",
+    "items": []
+  },
+  {
+    "listing": "/notes/index.html",
+    "items": [
+      "/notes/calculus.html",
+      "/notes/statistics.html"
     ]
   }
 ]
